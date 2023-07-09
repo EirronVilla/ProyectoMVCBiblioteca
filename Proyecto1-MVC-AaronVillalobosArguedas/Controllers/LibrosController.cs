@@ -136,13 +136,13 @@ namespace Proyecto1_MVC_AaronVillalobosArguedas.Controllers
         // POST: Libros/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(string ISBN)
         {
             if (_context.Libros == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Libros'  is null.");
             }
-            var libro = await _context.Libros.FindAsync(id);
+            var libro = await _context.Libros.FindAsync(ISBN);
             if (libro != null)
             {
                 _context.Libros.Remove(libro);

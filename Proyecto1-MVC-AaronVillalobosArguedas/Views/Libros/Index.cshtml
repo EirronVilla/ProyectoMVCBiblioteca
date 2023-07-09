@@ -4,6 +4,12 @@
     ViewData["Title"] = "View";
 }
 
+<style>
+    a{
+        text-decoration:none;
+    }
+</style>
+
 <h1>Biblioteca Proyecto #1</h1>
 
 <h4>Listado de Libros Disponibles</h4>
@@ -19,7 +25,7 @@
                     <th scope="col">Editorial</th>
                     <th scope="col">Edición</th>
                     <th scope="col">Autor</th>
-                    <th scope="col">Ejemplares Disponibles</th>
+                    <th scope="col">Ejemplares</th>
                     <th scope="col">Acciones</th>
                 </tr>
             </thead>
@@ -33,8 +39,23 @@
                         <td>@libro.Edicion</td>
                         <td>@libro.Autor</td>
                         <td>@libro.Disponibles</td>
-                        <td><a href="#">Ver Detalles</a> | <a href="#">Solicitar Prestamo</a></td>
+                        <td style="text-decoration:none;">
+                            <span href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ver Detalles">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </span> |
+                            <span href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Prestamo">
+                                <i class="fa-solid fa-hand-holding-heart"> </i>
+                            </span> |
+                            <span href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Editar">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </span> |
+                            <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Eliminar">
+                                <i class="fa-solid fa-trash" data-bs-toggle="modal" data-bs-target="@String.Format("#deleteModal-{0}", libro.ISBN)" ></i>
+                            </span>
+                        </td>
                     </tr>
+
+                    <partial name="_Delete" for="@libro"/>
                 }
             </tbody>
         </table>
@@ -44,10 +65,23 @@
     }
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div style="text-align:right">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
+        Agregar Libro
+    </button>
 </div>
+
+@{
+    Html.RenderPartial("_Create", new Libro());
+}
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>
