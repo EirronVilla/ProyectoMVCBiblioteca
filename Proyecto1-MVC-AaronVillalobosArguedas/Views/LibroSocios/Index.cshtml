@@ -1,0 +1,81 @@
+﻿@model ICollection<Proyecto1_MVC_AaronVillalobosArguedas.Models.LibroSocio>
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<style>
+    a{
+        text-decoration:none;
+    }
+</style>
+
+<h1>Biblioteca Proyecto #1</h1>
+
+<h4>Listado de Pr&eacute;stamos Registrados</h4>
+<hr />
+<div class="row">
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-info" role="alert">
+            @Html.Raw(ViewBag.Message)
+        </div>
+    }
+    @if(Model.Count > 0)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Cedula del Socio</th>
+                    <th scope="col">ISBN</th>
+                    <th scope="col">Fecha Prestamo</th>
+                    <th scope="col">Fecha de Retorno</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var prestamo in Model)
+                {
+                    <tr>
+                        <td>@prestamo.Id</td>
+                        <td>@prestamo.SocioId</td>
+                        <td>@prestamo.LibroISBN</td>
+                        <td>@prestamo.FechaPrestamo</td>
+                        <td>@prestamo.FechaRetorno</td>
+                        <td>@(prestamo.Estado ? "Activo" : "Devuelto")</td>
+                        <td style="text-decoration:none;">
+                            <span href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Prestamos Activos">
+                                <i class="fa-solid fa-circle-info"> </i>
+                            </span> |
+                            <span href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Editar">
+                                <a asp-area="" asp-controller="Socios" asp-action="Edit" asp-route-id="@prestamo.Id">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+                            </span> |
+                            <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Eliminar">
+                                <i class="fa-solid fa-trash" data-bs-toggle="modal" data-bs-target="@String.Format("#deleteModal-{0}", prestamo.Id)"></i>
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    } else
+    {
+        <p> No hay datos registrados. </p>
+    }
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>

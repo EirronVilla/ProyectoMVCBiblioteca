@@ -16,7 +16,7 @@ namespace Proyecto1_MVC_AaronVillalobosArguedas.Models
             Cedula = string.Empty;
             Nombre = string.Empty;
             Apellidos = string.Empty;
-            FechaRegistro = new DateTime();
+            FechaRegistro = DateTime.Now;
             Activo = false;
         }
 

@@ -1,0 +1,51 @@
+﻿@model Proyecto1_MVC_AaronVillalobosArguedas.Models.Socio
+
+<!-- Modal -->
+<div class="modal fade" id="@String.Format("deleteModal-{0}", Model.Cedula)" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <dl class="row">
+                    <dt class="col-sm-6">
+                        @Html.DisplayNameFor(model => model.Nombre)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.Nombre)
+                    </dd>
+                    <dt class="col-sm-6">
+                        @Html.DisplayNameFor(model => model.Apellidos)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.Apellidos)
+                    </dd>
+                    <dt class="col-sm-6">
+                        @Html.DisplayNameFor(model => model.FechaRegistro)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.FechaRegistro)
+                    </dd>
+                    <dt class="col-sm-6">
+                        @Html.DisplayNameFor(model => model.Activo)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.Activo)
+                    </dd>
+                </dl>
+            </div>
+
+            <form asp-action="Delete" method="post" id="@String.Format("delete-book-form-{0}", Model.Cedula)">
+                <input type="hidden" asp-for="Cedula" />
+            </form>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="submit" form="@String.Format("delete-book-form-{0}", Model.Cedula)" class="btn btn-danger">Borrar</button>
+            </div>
+
+        </div>
+    </div>
+</div>

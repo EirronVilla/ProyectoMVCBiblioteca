@@ -24,5 +24,7 @@ namespace Proyecto1_MVC_AaronVillalobosArguedas.Data
                     s => s.HasOne<Socio>().WithMany().HasForeignKey(e => e.SocioId),
                     l => l.HasOne<Libro>().WithMany().HasForeignKey(e => e.LibroISBN));
         }
+
+        public DbSet<Proyecto1_MVC_AaronVillalobosArguedas.Models.LibroSocio>? LibroSocio { get; set; }
     }
 }

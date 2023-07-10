@@ -1,4 +1,4 @@
-﻿@model ICollection<Proyecto1_MVC_AaronVillalobosArguedas.Models.Libro>
+﻿@model ICollection<Proyecto1_MVC_AaronVillalobosArguedas.Models.Socio>
 
 @{
     ViewData["Title"] = "View";
@@ -12,7 +12,7 @@
 
 <h1>Biblioteca Proyecto #1</h1>
 
-<h4>Listado de Libros Disponibles</h4>
+<h4>Listado de Socios Registrados</h4>
 <hr />
 <div class="row">
     @if (ViewBag.Message != null)
@@ -26,40 +26,35 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col">ISBN</th>
-                    <th scope="col">Título</th>
-                    <th scope="col">Editorial</th>
-                    <th scope="col">Edición</th>
-                    <th scope="col">Autor</th>
-                    <th scope="col">Ejemplares</th>
+                    <th scope="col">C&eacute;dula</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Apellidos</th>
+                    <th scope="col">Fecha Registro</th>
+                    <th scope="col">Activo</th>
                     <th scope="col">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var libro in Model)
+                @foreach (var socio in Model)
                 {
-                    <partial name="_Delete" for="@libro"/>
+                    <partial name="_Delete" for="@socio" />
                     <tr>
-                        <td>@libro.ISBN</td>
-                        <td>@libro.Titulo</td>
-                        <td>@libro.Editorial</td>
-                        <td>@libro.Edicion</td>
-                        <td>@libro.Autor</td>
-                        <td>@libro.Disponibles</td>
+                        <td>@socio.Cedula</td>
+                        <td>@socio.Nombre</td>
+                        <td>@socio.Apellidos</td>
+                        <td>@socio.FechaRegistro.ToString()</td>
+                        <td>@(socio.Activo ? "Activo" : "Inactivo")</td>
                         <td style="text-decoration:none;">
-                            <span href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ver Detalles">
-                                <i class="fa-solid fa-circle-info"></i>
-                            </span> |
-                            <span href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Prestamo">
-                                <i class="fa-solid fa-hand-holding-heart"> </i>
+                            <span href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Prestamos Activos">
+                                <i class="fa-solid fa-circle-info"> </i>
                             </span> |
                             <span href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Editar">
-                                <a asp-area="" asp-controller="Libros" asp-action="Edit" asp-route-id="@libro.ISBN">
+                                <a asp-area="" asp-controller="Socios" asp-action="Edit" asp-route-id="@socio.Cedula">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
                             </span> |
                             <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Eliminar">
-                                <i class="fa-solid fa-trash" data-bs-toggle="modal" data-bs-target="@String.Format("#deleteModal-{0}", libro.ISBN)" ></i>
+                                <i class="fa-solid fa-trash" data-bs-toggle="modal" data-bs-target="@String.Format("#deleteModal-{0}", socio.Cedula)"></i>
                             </span>
                         </td>
                     </tr>
@@ -74,13 +69,14 @@
 
 <div style="text-align:right">
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
-        Agregar Libro
+        Agregar Socio
     </button>
 </div>
 
 @{
-    Html.RenderPartial("_Create", new Libro());
+    Html.RenderPartial("_Create", new Socio());
 }
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

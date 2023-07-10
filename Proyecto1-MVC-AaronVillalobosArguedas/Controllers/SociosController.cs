@@ -1,95 +1,96 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Proyecto1_MVC_AaronVillalobosArguedas.Data;
 using Proyecto1_MVC_AaronVillalobosArguedas.Models;
 
 namespace Proyecto1_MVC_AaronVillalobosArguedas.Controllers
 {
-    [Authorize]
-    public class LibrosController : Controller
+    public class SociosController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public LibrosController(ApplicationDbContext context)
+        public SociosController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Libros
+        // GET: Socios
         public async Task<IActionResult> Index()
         {
-              return _context.Libros != null ? 
-                          View(await _context.Libros.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Libros'  is null.");
+              return _context.Socios != null ? 
+                          View(await _context.Socios.ToListAsync()) :
+                          Problem("Entity set 'ApplicationDbContext.Socios'  is null.");
         }
 
-        // GET: Libros/Details/5
+        // GET: Socios/Details/5
         public async Task<IActionResult> Details(string id)
         {
-            if (id == null || _context.Libros == null)
+            if (id == null || _context.Socios == null)
             {
                 return NotFound();
             }
 
-            var libro = await _context.Libros
-                .FirstOrDefaultAsync(m => m.ISBN == id);
-            if (libro == null)
+            var socio = await _context.Socios
+                .FirstOrDefaultAsync(m => m.Cedula == id);
+            if (socio == null)
             {
                 return NotFound();
             }
 
-            return View(libro);
+            return View(socio);
         }
 
-        // GET: Libros/Create
+        // GET: Socios/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Libros/Create
+        // POST: Socios/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ISBN,Titulo,Editorial,Edicion,Autor,Disponibles")] Libro libro)
+        public async Task<IActionResult> Create([Bind("Cedula,Nombre,Apellidos,FechaRegistro,Activo")] Socio socio)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(libro);
+                _context.Add(socio);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
-            ViewBag.Message = String.Format("Libro {0} creado con exito.", libro.ISBN);
-            return View(libro);
+            return View(socio);
         }
 
-        // GET: Libros/Edit/5
+        // GET: Socios/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
-            if (id == null || _context.Libros == null)
+            if (id == null || _context.Socios == null)
             {
                 return NotFound();
             }
 
-            var libro = await _context.Libros.FindAsync(id);
-            if (libro == null)
+            var socio = await _context.Socios.FindAsync(id);
+            if (socio == null)
             {
                 return NotFound();
             }
-            return View(libro);
+            return View(socio);
         }
 
-        // POST: Libros/Edit/5
+        // POST: Socios/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("ISBN,Titulo,Editorial,Edicion,Autor,Disponibles")] Libro libro)
+        public async Task<IActionResult> Edit(string id, [Bind("Cedula,Nombre,Apellidos,FechaRegistro,Activo")] Socio socio)
         {
-            if (id != libro.ISBN)
+            if (id != socio.Cedula)
             {
                 return NotFound();
             }
@@ -98,12 +99,12 @@ namespace Proyecto1_MVC_AaronVillalobosArguedas.Controllers
             {
                 try
                 {
-                    _context.Update(libro);
+                    _context.Update(socio);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LibroExists(libro.ISBN))
+                    if (!SocioExists(socio.Cedula))
                     {
                         return NotFound();
                     }
@@ -114,52 +115,50 @@ namespace Proyecto1_MVC_AaronVillalobosArguedas.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(libro);
+            return View(socio);
         }
 
-        // GET: Libros/Delete/5
+        // GET: Socios/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
-            if (id == null || _context.Libros == null)
+            if (id == null || _context.Socios == null)
             {
                 return NotFound();
             }
 
-            var libro = await _context.Libros
-                .FirstOrDefaultAsync(m => m.ISBN == id);
-            if (libro == null)
+            var socio = await _context.Socios
+                .FirstOrDefaultAsync(m => m.Cedula == id);
+            if (socio == null)
             {
                 return NotFound();
             }
 
-            return View(libro);
+            return View(socio);
         }
 
-        // POST: Libros/Delete/5
+        // POST: Socios/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed()
         {
-            string ISBN = Request.Form["libro.ISBN"];
-            if (_context.Libros == null)
+            string id = Request.Form["socio.Cedula"];
+            if (_context.Socios == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Libros'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Socios'  is null.");
             }
-            var libro = await _context.Libros.FindAsync(ISBN);
-            if (libro != null)
+            var socio = await _context.Socios.FindAsync(id);
+            if (socio != null)
             {
-                _context.Libros.Remove(libro);
+                _context.Socios.Remove(socio);
             }
-
-            ViewBag.Message = String.Format("Libro {0} borrado con exito.", ISBN);
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool LibroExists(string id)
+        private bool SocioExists(string id)
         {
-          return (_context.Libros?.Any(e => e.ISBN == id)).GetValueOrDefault();
+          return (_context.Socios?.Any(e => e.Cedula == id)).GetValueOrDefault();
         }
     }
 }
