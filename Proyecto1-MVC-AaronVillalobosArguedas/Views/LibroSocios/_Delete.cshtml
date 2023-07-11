@@ -1,0 +1,45 @@
+﻿@model Proyecto1_MVC_AaronVillalobosArguedas.Models.LibroSocio
+
+<!-- Modal -->
+<div class="modal fade" id="@String.Format("deleteModal-{0}", Model.Id)" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <dl class="row">
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.FechaPrestamo)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.FechaPrestamo)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.FechaRetorno)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.FechaRetorno)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Estado)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Estado)
+                    </dd>
+                </dl>
+            </div>
+
+            <form asp-action="Delete" method="post" id="@String.Format("delete-borrow-form-{0}", Model.Id)">
+                <input type="hidden" asp-for="Id" />
+            </form>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="submit" form="@String.Format("delete-borrow-form-{0}", Model.Id)" class="btn btn-info">Realizar Devoluci&oacute;n</button>
+            </div>
+
+        </div>
+    </div>
+</div>

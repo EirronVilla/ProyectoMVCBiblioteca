@@ -1,6 +1,7 @@
 ﻿
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Proyecto1_MVC_AaronVillalobosArguedas.Models
 {
@@ -30,6 +31,15 @@ namespace Proyecto1_MVC_AaronVillalobosArguedas.Models
         public int Disponibles { get; set; }
 
         public List<Socio>? Socios { get; }
+
+        [NotMapped]
+        public String LibroInfo
+        {
+            get
+            {
+                return String.Format("{0} ({1})", this.Titulo, this.ISBN);
+            }
+        }
 
         public Libro() { 
             ISBN = string.Empty;

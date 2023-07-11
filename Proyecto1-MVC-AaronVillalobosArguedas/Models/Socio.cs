@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Proyecto1_MVC_AaronVillalobosArguedas.Models
 {
@@ -12,6 +14,12 @@ namespace Proyecto1_MVC_AaronVillalobosArguedas.Models
         public bool Activo { get; set; }
         public List<Libro>? Libros { get; }
 
+        [NotMapped]
+        public String NombreCompleto { get
+            {
+                return String.Format("{0} {1} ({2})", this.Nombre, this.Apellidos, this.Cedula);
+            }
+        }
         public Socio() { 
             Cedula = string.Empty;
             Nombre = string.Empty;

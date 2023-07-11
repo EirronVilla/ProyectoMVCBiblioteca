@@ -27,8 +27,21 @@ namespace Proyecto1_MVC_AaronVillalobosArguedas.Controllers
                           Problem("Entity set 'ApplicationDbContext.LibroSocio'  is null.");
         }
 
-        // GET: LibroSocios/Details/5
-        public async Task<IActionResult> Details(int? id)
+		public IActionResult CreateWithBook(Libro? libro = null)
+		{
+			if (libro == null)
+			{
+				return RedirectToAction("Create");
+			}
+
+            ViewBag.Socios = _context.Socios.ToList();
+            ViewBag.Libros = _context.Libros.ToList();
+            ViewBag.SelectedBook = libro;
+			return View("Create", new LibroSocio());
+		}
+
+		// GET: LibroSocios/Details/5
+		public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.LibroSocio == null)
             {
@@ -48,7 +61,9 @@ namespace Proyecto1_MVC_AaronVillalobosArguedas.Controllers
         // GET: LibroSocios/Create
         public IActionResult Create()
         {
-            return View();
+            ViewBag.Socios = _context.Socios.ToList();
+            ViewBag.Libros = _context.Libros.ToList();
+            return View(new LibroSocio());
         }
 
         // POST: LibroSocios/Create
@@ -60,8 +75,14 @@ namespace Proyecto1_MVC_AaronVillalobosArguedas.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(libroSocio);
-                await _context.SaveChangesAsync();
+                Libro? libro = !String.IsNullOrEmpty(libroSocio.LibroISBN) ? _context.Libros.Find(libroSocio.LibroISBN) : null;
+                if(libro != null && libro.Disponibles > 0)
+                {
+                    libro.Disponibles--;
+                    _context.Add(libroSocio);
+                    await _context.SaveChangesAsync();
+                }
+                
                 return RedirectToAction(nameof(Index));
             }
             return View(libroSocio);
@@ -139,16 +160,26 @@ namespace Proyecto1_MVC_AaronVillalobosArguedas.Controllers
         // POST: LibroSocios/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed()
         {
-            if (_context.LibroSocio == null)
+            string idValue = Request.Form["prestamo.Id"];
+			int id = 0;
+            int.TryParse(idValue, out id);
+                
+			if (_context.LibroSocio == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.LibroSocio'  is null.");
             }
             var libroSocio = await _context.LibroSocio.FindAsync(id);
             if (libroSocio != null)
             {
-                _context.LibroSocio.Remove(libroSocio);
+                libroSocio.Estado = false;
+
+                Libro? libro = _context.Libros.Find(libroSocio.LibroISBN);
+                if(libro != null)
+                {
+                    libro.Disponibles++;
+                }
             }
             
             await _context.SaveChangesAsync();

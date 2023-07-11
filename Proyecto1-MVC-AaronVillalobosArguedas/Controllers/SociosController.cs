@@ -23,7 +23,7 @@ namespace Proyecto1_MVC_AaronVillalobosArguedas.Controllers
         public async Task<IActionResult> Index()
         {
               return _context.Socios != null ? 
-                          View(await _context.Socios.ToListAsync()) :
+                          View(await _context.Socios.Include(partner => partner.Libros).ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Socios'  is null.");
         }
 

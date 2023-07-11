@@ -20,7 +20,7 @@ namespace Proyecto1_MVC_AaronVillalobosArguedas.Controllers
         public async Task<IActionResult> Index()
         {
               return _context.Libros != null ? 
-                          View(await _context.Libros.ToListAsync()) :
+                          View(await _context.Libros.Include(book => book.Socios).ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Libros'  is null.");
         }
 
@@ -42,8 +42,8 @@ namespace Proyecto1_MVC_AaronVillalobosArguedas.Controllers
             return View(libro);
         }
 
-        // GET: Libros/Create
-        public IActionResult Create()
+		// GET: Libros/Create
+		public IActionResult Create()
         {
             return View();
         }
@@ -62,12 +62,28 @@ namespace Proyecto1_MVC_AaronVillalobosArguedas.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Message = String.Format("Libro {0} creado con exito.", libro.ISBN);
+            ViewData["Message"] = String.Format("Libro {0} creado con exito.", libro.ISBN);
             return View(libro);
         }
 
-        // GET: Libros/Edit/5
-        public async Task<IActionResult> Edit(string id)
+		// GET: Libros/Borrow/5
+		public async Task<IActionResult> Borrow(string id)
+		{
+			if (id == null || _context.Libros == null)
+			{
+				return NotFound();
+			}
+
+			var libro = await _context.Libros.FindAsync(id);
+			if (libro == null)
+			{
+				return NotFound();
+			}
+			return RedirectToAction("CreateWithBook", "LibroSocios", libro);
+		}
+
+		// GET: Libros/Edit/5
+		public async Task<IActionResult> Edit(string id)
         {
             if (id == null || _context.Libros == null)
             {
@@ -151,8 +167,8 @@ namespace Proyecto1_MVC_AaronVillalobosArguedas.Controllers
                 _context.Libros.Remove(libro);
             }
 
-            ViewBag.Message = String.Format("Libro {0} borrado con exito.", ISBN);
-            
+            ViewData["Message"] = String.Format("Libro {0} creado con exito.", libro.ISBN);
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

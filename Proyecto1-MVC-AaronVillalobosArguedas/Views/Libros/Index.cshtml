@@ -1,13 +1,13 @@
 ﻿@model ICollection<Proyecto1_MVC_AaronVillalobosArguedas.Models.Libro>
 
 @{
-    ViewData["Title"] = "View";
+	ViewData["Title"] = "View";
 }
 
 <style>
-    a{
-        text-decoration:none;
-    }
+	a {
+		text-decoration: none;
+	}
 </style>
 
 <h1>Biblioteca Proyecto #1</h1>
@@ -15,80 +15,86 @@
 <h4>Listado de Libros Disponibles</h4>
 <hr />
 <div class="row">
-    @if (ViewBag.Message != null)
-    {
-        <div class="alert alert-info" role="alert">
-            @Html.Raw(ViewBag.Message)
-        </div>
-    }
-    @if(Model.Count > 0)
-    {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">ISBN</th>
-                    <th scope="col">Título</th>
-                    <th scope="col">Editorial</th>
-                    <th scope="col">Edición</th>
-                    <th scope="col">Autor</th>
-                    <th scope="col">Ejemplares</th>
-                    <th scope="col">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var libro in Model)
-                {
-                    <partial name="_Delete" for="@libro"/>
-                    <tr>
-                        <td>@libro.ISBN</td>
-                        <td>@libro.Titulo</td>
-                        <td>@libro.Editorial</td>
-                        <td>@libro.Edicion</td>
-                        <td>@libro.Autor</td>
-                        <td>@libro.Disponibles</td>
-                        <td style="text-decoration:none;">
-                            <span href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ver Detalles">
-                                <i class="fa-solid fa-circle-info"></i>
-                            </span> |
-                            <span href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Prestamo">
-                                <i class="fa-solid fa-hand-holding-heart"> </i>
-                            </span> |
-                            <span href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Editar">
-                                <a asp-area="" asp-controller="Libros" asp-action="Edit" asp-route-id="@libro.ISBN">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </a>
-                            </span> |
-                            <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Eliminar">
-                                <i class="fa-solid fa-trash" data-bs-toggle="modal" data-bs-target="@String.Format("#deleteModal-{0}", libro.ISBN)" ></i>
-                            </span>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    } else
-    {
-        <p> No hay datos registrados. </p>
-    }
+	@if (ViewData["Message"] != null)
+	{
+		<div class="alert alert-info" role="alert">
+			@ViewData["Message"]
+		</div>
+	}
+	@if (Model.Count > 0)
+	{
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col">ISBN</th>
+					<th scope="col">Título</th>
+					<th scope="col">Editorial</th>
+					<th scope="col">Edición</th>
+					<th scope="col">Autor</th>
+					<th scope="col">Ejemplares</th>
+					<th scope="col">Acciones</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var libro in Model)
+				{
+					<partial name="_Details" for="@libro" />
+					<partial name="_Delete" for="@libro" />
+					<tr>
+						<td>@libro.ISBN</td>
+						<td>@libro.Titulo</td>
+						<td>@libro.Editorial</td>
+						<td>@libro.Edicion</td>
+						<td>@libro.Autor</td>
+						<td>@libro.Disponibles</td>
+						<td style="text-decoration:none;">
+							<span href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ver Detalles">
+								<i class="fa-solid fa-circle-info" data-bs-toggle="modal" data-bs-target="@String.Format("#detailsModal-{0}", libro.ISBN)"></i>
+							</span> |
+							<span href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Prestamo">
+								<a asp-area="" asp-controller="Libros" asp-action="Borrow" asp-route-id="@libro.ISBN">
+									<i class="fa-solid fa-hand-holding-heart"> </i>
+								</a>
+							</span> |
+							<span href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Editar">
+								<a asp-area="" asp-controller="Libros" asp-action="Edit" asp-route-id="@libro.ISBN">
+									<i class="fa-solid fa-pen-to-square"></i>
+								</a>
+							</span> |
+							<span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Eliminar">
+								<i class="fa-solid fa-trash" data-bs-toggle="modal" data-bs-target="@String.Format("#deleteModal-{0}", libro.ISBN)"></i>
+							</span>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	}
+	else
+	{
+		<p> No hay datos registrados. </p>
+	}
 </div>
 
 <div style="text-align:right">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
-        Agregar Libro
-    </button>
+	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
+		Agregar Libro
+	</button>
 </div>
 
 @{
-    Html.RenderPartial("_Create", new Libro());
+	Html.RenderPartial("_Create", new Libro());
 }
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
 }
 
 <script>
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
+	var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+	var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+		return new bootstrap.Tooltip(tooltipTriggerEl)
+	})
 </script>

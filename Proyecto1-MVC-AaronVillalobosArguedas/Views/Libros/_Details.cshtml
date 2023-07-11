@@ -1,0 +1,78 @@
+﻿@model Proyecto1_MVC_AaronVillalobosArguedas.Models.Libro
+
+<!-- Modal -->
+<div class="modal fade" id="@String.Format("detailsModal-{0}", Model.ISBN)" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<dl class="row">
+					<dt class="col-sm-6">
+						@Html.DisplayNameFor(model => model.ISBN)
+					</dt>
+					<dd class="col-sm-6">
+						@Html.DisplayFor(model => model.ISBN)
+					</dd>
+					<dt class="col-sm-6">
+						@Html.DisplayNameFor(model => model.Titulo)
+					</dt>
+					<dd class="col-sm-6">
+						@Html.DisplayFor(model => model.Titulo)
+					</dd>
+					<dt class="col-sm-6">
+						@Html.DisplayNameFor(model => model.Editorial)
+					</dt>
+					<dd class="col-sm-6">
+						@Html.DisplayFor(model => model.Editorial)
+					</dd>
+					<dt class="col-sm-6">
+						@Html.DisplayNameFor(model => model.Edicion)
+					</dt>
+					<dd class="col-sm-6">
+						@Html.DisplayFor(model => model.Edicion)
+					</dd>
+					<dt class="col-sm-6">
+						@Html.DisplayNameFor(model => model.Autor)
+					</dt>
+					<dd class="col-sm-6">
+						@Html.DisplayFor(model => model.Autor)
+					</dd>
+					<dt class="col-sm-6">
+						@Html.DisplayNameFor(model => model.Disponibles)
+					</dt>
+					<dd class="col-sm-6">
+						@Html.DisplayFor(model => model.Disponibles)
+					</dd>
+				</dl>
+
+				@if (Model.Socios?.Count > 0)
+				{
+
+					@foreach (var socio in Model.Socios)
+					{
+						<div class="card">
+							<div class="card-body">
+								<div>@socio.Cedula</div>
+								<div>@socio.NombreCompleto</div>
+								<div>@socio.FechaRegistro.ToString()</div>
+							</div>
+						</div>
+					}
+
+				}
+				else
+				{
+					<p> Este libro no tiene prestamos. </p>
+				}
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+			</div>
+
+		</div>
+	</div>
+</div>
